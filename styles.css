@@ -89,8 +89,16 @@ input[type="submit"] {
   transition: all 0.3s;
 }
 
+input[type="submit"]#delete:hover {
+  background-color: red;
+}
+
 input[type="submit"]:active {
-  background-color: gray;
+  background-color: gray !important;
+}
+
+input[type="submit"]:hover {
+  background-color: rgb(36, 168, 36);
 }
 
 form h4 {

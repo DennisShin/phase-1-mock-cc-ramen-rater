@@ -1,7 +1,18 @@
 // write your code here
+const deleteForm = document.querySelector("#delete-ramen");
 let idCounter = 1
 let selectedId;
 
+//Show Ramens!
+fetch("http://localhost:3000/ramens")
+.then(res => res.json())
+.then(ramens => {
+    selectedId = ramens[0].id;
+    ramens.forEach(ramen => addRamen(ramen))
+    showRamen(ramens[0])
+})
+
+//Add New Ramen Image!
 function addRamen(ramen){
     const ramenImg = document.createElement("img");
     ramenImg.src = ramen.image;
@@ -16,6 +27,7 @@ function addRamen(ramen){
     idCounter++;
 }
 
+//Show Selected Ramen Details!
 function showRamen(ramen){
         document.querySelector(".detail-image").src = ramen.image
         document.querySelector(".name").textContent = ramen.name
@@ -23,15 +35,6 @@ function showRamen(ramen){
         document.querySelector("#rating-display").textContent = ramen.rating
         document.querySelector("#comment-display").textContent = ramen.comment
 }
-
-fetch("http://localhost:3000/ramens")
-.then(res => res.json())
-.then(ramens => {
-    selectedId = ramens[0].id;
-    ramens.forEach(ramen => addRamen(ramen))
-    showRamen(ramens[0])
-
-})
 
 //New Ramen Form Handler!
 document.querySelector("#new-ramen").addEventListener("submit", (e) => {
@@ -45,7 +48,6 @@ document.querySelector("#new-ramen").addEventListener("submit", (e) => {
         "rating": parseInt(e.target.rating.value),
         "comment": e.target["new-comment"].value   
     }
-
     fetch("http://localhost:3000/ramens",{
         method: "POST",
         headers:{
@@ -55,12 +57,11 @@ document.querySelector("#new-ramen").addEventListener("submit", (e) => {
     })
     .then(res => res.json())
     .then(ramen => {
+        selectedId = ramen.id
         addRamen(ramen)
         showRamen(ramen)
         document.querySelector("#new-ramen").reset();
     })
-   
-
 })
 
 //Edit Ramen Form Handler!
@@ -86,17 +87,13 @@ document.querySelector("#edit-ramen").addEventListener("submit", (e) => {
     })
     // document.querySelector("#rating-display").textContent = parseInt(e.target.rating.value);
     // document.querySelector("#comment-display").textContent = e.target["new-comment"].value;
-
 })
 
-
-//Delete Ramen Handler!
-const deleteForm = document.querySelector("#delete-ramen");
+//Delete Ramen Form Handler!
 deleteForm.addEventListener("submit", (e) => {
     fetch(`http://localhost:3000/ramens/${selectedId}`, {
         method: "DELETE"
     })
-
 })
 
 
